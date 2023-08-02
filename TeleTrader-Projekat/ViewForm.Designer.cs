@@ -79,8 +79,9 @@
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(107, 22);
+            aboutToolStripMenuItem.Size = new Size(180, 22);
             aboutToolStripMenuItem.Text = "About";
+            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
             // dataGridView1
             // 
@@ -169,6 +170,7 @@
             button5.TabIndex = 10;
             button5.Text = "Form close";
             button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
             // 
             // ViewForm
             // 
