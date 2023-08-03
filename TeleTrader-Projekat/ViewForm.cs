@@ -25,7 +25,7 @@ namespace TeleTrader_Projekat
 
         private void ViewForm_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private async void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -75,11 +75,36 @@ namespace TeleTrader_Projekat
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            reloadFiltered();
+        }
+
+        private DataAccess.Type type = new DataAccess.Type { Name = "All", Id = -1 };
+        private Exchange exchange = new Exchange { Name = "All", Id = -1 };
+
+        private async void button4_Click(object sender, EventArgs e)
+        {
+            await using var db = new SymbolContext(openFileDialog1.FileName);
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                var confirmResult = MessageBox.Show("Are you sure you want to delete this item?", "Confirm Delete!", MessageBoxButtons.YesNo);
+                if (confirmResult == DialogResult.Yes)
+                {
+                    DataGridViewRow sel = dataGridView1.SelectedRows[0];
+                    int i = (int)sel.Cells[0].Value;
+                    db.Remove(db.symbol.Single(x => x.Id == i));
+                    db.SaveChanges();
+                    reloadFiltered();
+                }
+            }
+        }
+
+        private async void reloadFiltered()
+        {
             List<Symbol> list_s = new List<Symbol>();
             await using var db = new SymbolContext(openFileDialog1.FileName);
             if (this.exchange.Id == -1)
             {
-                if(this.type.Id == -1)
+                if (this.type.Id == -1)
                 {
                     var symbols = from s in db.symbol select s;
                     await foreach (var s in symbols.AsAsyncEnumerable()) list_s.Add(s);
@@ -104,10 +129,6 @@ namespace TeleTrader_Projekat
                 }
             }
             dataGridView1.DataSource = list_s;
-
         }
-
-        private DataAccess.Type type = new DataAccess.Type { Name = "All", Id = -1 };
-        private Exchange exchange = new Exchange { Name = "All", Id = -1 };
     }
 }

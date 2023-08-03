@@ -171,6 +171,7 @@
             button4.TabIndex = 9;
             button4.Text = "Delete symbol";
             button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // button5
             // 
