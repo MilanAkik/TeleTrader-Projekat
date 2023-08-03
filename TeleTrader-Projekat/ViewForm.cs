@@ -78,9 +78,6 @@ namespace TeleTrader_Projekat
             reloadFiltered();
         }
 
-        private DataAccess.Type type = new DataAccess.Type { Name = "All", Id = -1 };
-        private Exchange exchange = new Exchange { Name = "All", Id = -1 };
-
         private async void button4_Click(object sender, EventArgs e)
         {
             await using var db = new SymbolContext(openFileDialog1.FileName);
@@ -98,10 +95,27 @@ namespace TeleTrader_Projekat
             }
         }
 
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            await using SymbolContext db = new SymbolContext(openFileDialog1.FileName);
+            EditForm ef = new EditForm(EditForm.Action.ADD, db, -1);
+            ef.Show();
+        }
+
+        private async void button3_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                await using SymbolContext db = new SymbolContext(openFileDialog1.FileName);
+                EditForm ef = new EditForm(EditForm.Action.UPDATE, db, (int)dataGridView1.SelectedRows[0].Cells[0].Value);
+                ef.Show();
+            }
+        }
+
         private async void reloadFiltered()
         {
             List<Symbol> list_s = new List<Symbol>();
-            await using var db = new SymbolContext(openFileDialog1.FileName);
+            await using SymbolContext db = new SymbolContext(openFileDialog1.FileName);
             if (this.exchange.Id == -1)
             {
                 if (this.type.Id == -1)
@@ -130,5 +144,9 @@ namespace TeleTrader_Projekat
             }
             dataGridView1.DataSource = list_s;
         }
+
+        private DataAccess.Type type = new DataAccess.Type { Name = "All", Id = -1 };
+        private Exchange exchange = new Exchange { Name = "All", Id = -1 };
+
     }
 }

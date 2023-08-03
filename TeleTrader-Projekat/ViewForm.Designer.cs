@@ -98,8 +98,6 @@
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(776, 356);
             dataGridView1.TabIndex = 1;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.MultiSelect = false;
             // 
             // comboBox1
             // 
@@ -155,6 +153,7 @@
             button2.TabIndex = 7;
             button2.Text = "Add symbol";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // button3
             // 
@@ -164,6 +163,7 @@
             button3.TabIndex = 8;
             button3.Text = "View/Edit symbol";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // button4
             // 
