@@ -98,6 +98,8 @@
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(776, 356);
             dataGridView1.TabIndex = 1;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.MultiSelect = false;
             // 
             // comboBox1
             // 
