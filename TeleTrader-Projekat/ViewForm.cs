@@ -1,5 +1,6 @@
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
+using DataAccess;
 
 namespace TeleTrader_Projekat
 {
@@ -22,16 +23,26 @@ namespace TeleTrader_Projekat
             MessageBox.Show(description, title);
         }
 
-        private async void ViewForm_Load(object sender, EventArgs e)
+        private void ViewForm_Load(object sender, EventArgs e)
         {
-            await using var db = new SymbolContext();
-            var results = from typ in db.type select typ;
-            String s = "Types";
-            await foreach( var t in results.AsAsyncEnumerable())
+            
+        }
+
+        private async void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Multiselect = false;
+            openFileDialog1.Filter = "SQLite files|*.sqlite; *.sqlite3; *.db; *.db3; *.s3db; *.sl3|All files (*.*)|*.*";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                s += "\n" + t.Name;
+                await using var db = new SymbolContext(openFileDialog1.FileName);
+                var results = from typ in db.type select typ;
+                List<DataAccess.Type> types = new List<DataAccess.Type>();
+                await foreach (var t in results.AsAsyncEnumerable())
+                {
+                    types.Add(t);
+                }
+                dataGridView1.DataSource = types;
             }
-            MessageBox.Show(s);
         }
     }
 }

@@ -14,9 +14,10 @@ namespace DataAccess
 
         public String DbPath { get; }
 
-        public SymbolContext()
+        public SymbolContext(String path)
         {
-            DbPath = "C:\\Users\\Milan\\Downloads\\database.s3db";
+            //DbPath = "C:\\Users\\Milan\\Downloads\\database.s3db";
+            DbPath = path;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
