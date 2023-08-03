@@ -11,12 +11,12 @@ namespace DataAccess
     {
 
         public DbSet<Type> type { get; set; }
+        public DbSet<Exchange> exchange { get; set; }
 
         public String DbPath { get; }
 
         public SymbolContext(String path)
         {
-            //DbPath = "C:\\Users\\Milan\\Downloads\\database.s3db";
             DbPath = path;
         }
 

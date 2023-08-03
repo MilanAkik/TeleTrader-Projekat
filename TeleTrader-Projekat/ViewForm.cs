@@ -25,7 +25,7 @@ namespace TeleTrader_Projekat
 
         private void ViewForm_Load(object sender, EventArgs e)
         {
-            
+            Text = type.Name + " || " + exchange.Name;
         }
 
         private async void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -36,13 +36,40 @@ namespace TeleTrader_Projekat
             {
                 await using var db = new SymbolContext(openFileDialog1.FileName);
                 var results = from typ in db.type select typ;
-                List<DataAccess.Type> types = new List<DataAccess.Type>();
-                await foreach (var t in results.AsAsyncEnumerable())
-                {
-                    types.Add(t);
-                }
-                dataGridView1.DataSource = types;
+                comboBox1.Items.Clear();
+                comboBox1.DisplayMember = "Name";
+                comboBox1.ValueMember = "Id";
+                DataAccess.Type all = new DataAccess.Type { Id = -1, Name = "All" };
+                comboBox1.Items.Add(all);
+                await foreach (var t in results.AsAsyncEnumerable()) comboBox1.Items.Add(t);
+                comboBox1.SelectedIndex = 0;
+
+                var exchanges = from ex in db.exchange select ex;
+                comboBox2.Items.Clear();
+                comboBox2.DisplayMember = "Name";
+                comboBox2.ValueMember = "Id";
+                Exchange all_e = new Exchange { Id = -1, Name = "All" };
+                comboBox2.Items.Add(all_e);
+                await foreach (var ex in exchanges.AsAsyncEnumerable()) comboBox2.Items.Add(ex);
+                comboBox2.SelectedIndex = 0;
             }
         }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DataAccess.Type t = comboBox1.SelectedItem as DataAccess.Type;
+            this.type = t;
+            Text = type.Name + " || " + exchange.Name;
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Exchange ex = comboBox2.SelectedItem as Exchange;
+            this.exchange = ex;
+            Text = type.Name + " || " + exchange.Name;
+        }
+
+        private DataAccess.Type type = new DataAccess.Type { Name="All", Id=-1 };
+        private Exchange exchange = new Exchange { Name = "All", Id = -1 };
     }
 }
