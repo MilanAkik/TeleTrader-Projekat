@@ -97,8 +97,7 @@ namespace TeleTrader_Projekat
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            await using SymbolContext db = new SymbolContext(openFileDialog1.FileName);
-            EditForm ef = new EditForm(EditForm.Action.ADD, db, -1);
+            EditForm ef = new EditForm(EditForm.EditAction.ADD, openFileDialog1.FileName, -1, reloadFiltered);
             ef.Show();
         }
 
@@ -106,8 +105,7 @@ namespace TeleTrader_Projekat
         {
             if (dataGridView1.SelectedRows.Count > 0)
             {
-                await using SymbolContext db = new SymbolContext(openFileDialog1.FileName);
-                EditForm ef = new EditForm(EditForm.Action.UPDATE, db, (int)dataGridView1.SelectedRows[0].Cells[0].Value);
+                EditForm ef = new EditForm(EditForm.EditAction.UPDATE, openFileDialog1.FileName, (int)dataGridView1.SelectedRows[0].Cells[0].Value, reloadFiltered);
                 ef.Show();
             }
         }
