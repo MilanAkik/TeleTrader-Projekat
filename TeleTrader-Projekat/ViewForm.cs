@@ -52,6 +52,12 @@ namespace TeleTrader_Projekat
                 comboBox2.Items.Add(all_e);
                 await foreach (var ex in exchanges.AsAsyncEnumerable()) comboBox2.Items.Add(ex);
                 comboBox2.SelectedIndex = 0;
+
+                List<Symbol> list_s = new List<Symbol>();
+                var symbols = from s in db.symbol select s;
+                await foreach (var s in symbols.AsAsyncEnumerable()) list_s.Add(s);
+                dataGridView1.DataSource = list_s;
+
             }
         }
 

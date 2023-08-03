@@ -12,6 +12,7 @@ namespace DataAccess
 
         public DbSet<Type> type { get; set; }
         public DbSet<Exchange> exchange { get; set; }
+        public DbSet<Symbol> symbol { get; set; }
 
         public String DbPath { get; }
 
