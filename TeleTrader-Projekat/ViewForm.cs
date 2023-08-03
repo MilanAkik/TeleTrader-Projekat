@@ -25,7 +25,7 @@ namespace TeleTrader_Projekat
 
         private void ViewForm_Load(object sender, EventArgs e)
         {
-            Text = type.Name + " || " + exchange.Name;
+            
         }
 
         private async void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -65,17 +65,49 @@ namespace TeleTrader_Projekat
         {
             DataAccess.Type t = comboBox1.SelectedItem as DataAccess.Type;
             this.type = t;
-            Text = type.Name + " || " + exchange.Name;
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             Exchange ex = comboBox2.SelectedItem as Exchange;
             this.exchange = ex;
-            Text = type.Name + " || " + exchange.Name;
         }
 
-        private DataAccess.Type type = new DataAccess.Type { Name="All", Id=-1 };
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            List<Symbol> list_s = new List<Symbol>();
+            await using var db = new SymbolContext(openFileDialog1.FileName);
+            if (this.exchange.Id == -1)
+            {
+                if(this.type.Id == -1)
+                {
+                    var symbols = from s in db.symbol select s;
+                    await foreach (var s in symbols.AsAsyncEnumerable()) list_s.Add(s);
+                }
+                else
+                {
+                    var symbols = from s in db.symbol where s.TypeId == type.Id select s;
+                    await foreach (var s in symbols.AsAsyncEnumerable()) list_s.Add(s);
+                }
+            }
+            else
+            {
+                if (this.type.Id == -1)
+                {
+                    var symbols = from s in db.symbol where s.ExchangeId == exchange.Id select s;
+                    await foreach (var s in symbols.AsAsyncEnumerable()) list_s.Add(s);
+                }
+                else
+                {
+                    var symbols = from s in db.symbol where (s.TypeId == type.Id) && (s.ExchangeId == exchange.Id) select s;
+                    await foreach (var s in symbols.AsAsyncEnumerable()) list_s.Add(s);
+                }
+            }
+            dataGridView1.DataSource = list_s;
+
+        }
+
+        private DataAccess.Type type = new DataAccess.Type { Name = "All", Id = -1 };
         private Exchange exchange = new Exchange { Name = "All", Id = -1 };
     }
 }
