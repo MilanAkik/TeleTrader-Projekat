@@ -181,7 +181,7 @@
             comboBox2.TabIndex = 15;
             // 
             // EditForm
-            // 
+            //
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(384, 391);
@@ -202,6 +202,7 @@
             Controls.Add(button2);
             Controls.Add(button1);
             Name = "EditForm";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "EditForm";
             Load += EditForm_Load;
             ResumeLayout(false);

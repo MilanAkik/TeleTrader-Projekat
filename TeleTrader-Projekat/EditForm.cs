@@ -82,24 +82,65 @@ namespace TeleTrader_Projekat
         private async void button2_Click(object sender, EventArgs e)
         {
             await using var db = new SymbolContext(path);
-            //if(Edit)
-            var results = from sym in db.symbol where sym.Id == Id select sym;
-            var types = from typ in db.type select typ;
-            var exchanges = from exc in db.exchange select exc;
-            Symbol s = results.First();
-            s.Name = textBox1.Text;
-            s.Ticker = textBox2.Text;
-            s.Isin = textBox3.Text;
-            s.CurrencyCode = textBox4.Text;
-            s.Price = Double.Parse(textBox5.Text);
-            int i = 0;
-            await foreach (var t in types.AsAsyncEnumerable()) if (i++ == comboBox1.SelectedIndex) s.TypeId = t.Id;
-            i = 0;
-            await foreach (var ex in exchanges.AsAsyncEnumerable()) if (i++ == comboBox2.SelectedIndex) s.ExchangeId = ex.Id;
-            db.Update(s);
-            db.SaveChanges();
-            refresh();
-            this.Close();
+            if (this.editaction == EditAction.UPDATE)
+            {
+                var results = from sym in db.symbol where sym.Id == Id select sym;
+                var types = from typ in db.type select typ;
+                var exchanges = from exc in db.exchange select exc;
+                Symbol s = results.First();
+                s.Name = textBox1.Text;
+                s.Ticker = textBox2.Text;
+                s.Isin = textBox3.Text;
+                s.CurrencyCode = textBox4.Text;
+                s.Price = Double.Parse(textBox5.Text);
+                int i = 0;
+                await foreach (var t in types.AsAsyncEnumerable()) if (i++ == comboBox1.SelectedIndex) s.TypeId = t.Id;
+                i = 0;
+                await foreach (var ex in exchanges.AsAsyncEnumerable()) if (i++ == comboBox2.SelectedIndex) s.ExchangeId = ex.Id;
+                db.Update(s);
+                db.SaveChanges();
+                refresh();
+                this.Close();
+            }
+            else
+            {
+                var types = from typ in db.type select typ;
+                var exchanges = from exc in db.exchange select exc;
+                Symbol s = new Symbol
+                {
+                    Name = textBox1.Text,
+                    Ticker = textBox2.Text,
+                    Isin = textBox3.Text,
+                    CurrencyCode = textBox4.Text,
+                    Price = Double.Parse(textBox5.Text),
+                    TypeId = -1,
+                    ExchangeId = -1,
+                    DateAdded = DateTime.Now,
+                    PriceDate = DateTime.Now,
+                };
+                int i = 0;
+                await foreach (var t in types.AsAsyncEnumerable())
+                {
+                    if (i++ == comboBox1.SelectedIndex)
+                    {
+                        s.TypeId = t.Id;
+                        s.Type = t;
+                    }
+                }
+                i = 0;
+                await foreach (var ex in exchanges.AsAsyncEnumerable())
+                {
+                    if (i++ == comboBox2.SelectedIndex)
+                    {
+                        s.ExchangeId = ex.Id;
+                        s.Exchange = ex;
+                    }
+                }
+                db.symbol.Add(s);
+                db.SaveChanges();
+                refresh();
+                this.Close();
+            }
         }
     }
 }
