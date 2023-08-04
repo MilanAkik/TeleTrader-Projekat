@@ -25,7 +25,12 @@ namespace TeleTrader_Projekat
 
         private void ViewForm_Load(object sender, EventArgs e)
         {
-
+            button1.Enabled = false;
+            button2.Enabled = false;
+            button3.Enabled = false;
+            button4.Enabled = false;
+            comboBox1.Enabled = false;
+            comboBox2.Enabled = false;
         }
 
         private async void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -57,6 +62,13 @@ namespace TeleTrader_Projekat
                 var symbols = from s in db.symbol select s;
                 await foreach (var s in symbols.AsAsyncEnumerable()) list_s.Add(s);
                 dataGridView1.DataSource = list_s;
+
+                button1.Enabled = true;
+                button2.Enabled = true;
+                button3.Enabled = true;
+                button4.Enabled = true;
+                comboBox1.Enabled = true;
+                comboBox2.Enabled = true;
 
             }
         }
