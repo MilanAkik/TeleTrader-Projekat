@@ -155,8 +155,12 @@ namespace TeleTrader_Projekat
             dataGridView1.DataSource = list_s;
         }
 
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         private DataAccess.Type type = new DataAccess.Type { Name = "All", Id = -1 };
         private Exchange exchange = new Exchange { Name = "All", Id = -1 };
-
     }
 }
