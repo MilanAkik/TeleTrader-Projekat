@@ -81,6 +81,17 @@ namespace TeleTrader_Projekat
 
         private async void button2_Click(object sender, EventArgs e)
         {
+            String message = "";
+            if (textBox1.Text.Length == 0) message += "Name field is empty\n";
+            if (textBox2.Text.Length == 0) message += "Ticker field is empty\n";
+            if (textBox3.Text.Length == 0) message += "Isin field is empty\n";
+            if (textBox4.Text.Length == 0) message += "Currency code field is empty\n";
+            if (!IsValidDouble(textBox5.Text)) message += "Price field needs to be real number\n";
+            if (message.Length > 0)
+            {
+                MessageBox.Show(message + "This needs to be fixed before saving to the database", "Validation warning");
+                return;
+            }
             await using var db = new SymbolContext(path);
             if (this.editaction == EditAction.UPDATE)
             {
@@ -142,5 +153,12 @@ namespace TeleTrader_Projekat
                 this.Close();
             }
         }
+
+        public static bool IsValidDouble(string ValueToTest)
+        {
+            return double.TryParse(ValueToTest, out double d) &&
+                   !(double.IsNaN(d) || double.IsInfinity(d));
+        }
+
     }
 }
